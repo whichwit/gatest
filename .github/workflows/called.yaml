@@ -2,16 +2,12 @@ name: Reusable Print Environment Variable
 
 on:
   workflow_call:
-    inputs:
-      environment_name:
-        type: string
-        required: true
   workflow_dispatch:
 
 jobs:
   print-env:
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment_name }}
+    environment: production
     steps:
       - name: Print environment variable
         run: echo ${{ vars.VAR }}
