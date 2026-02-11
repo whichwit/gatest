@@ -1,7 +1,11 @@
 name: Reusable Print Environment Variable
 
 on:
-  workflow_call:
+  workflow_call:inputs:
+    inputs:
+      environment_name:
+        type: string
+        required: true
   workflow_dispatch:
 
 jobs:
