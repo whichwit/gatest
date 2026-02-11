@@ -3,7 +3,7 @@ name: Reusable Print Environment Variable
 on:
   workflow_call:
     # Map the workflow outputs to job outputs
-    inputs:
+    secrets:
       VAR:
         required: true
 
@@ -11,6 +11,8 @@ jobs:
   my-dynamic-env-job:
     runs-on: ubuntu-latest
     environment: production
+    env:
+      VAR: ${{ secrets.VAR }}
     steps:
       - run: |
-          echo "${{ vars.VAR }}"
+          echo "${{ env.VAR }}"
