@@ -8,11 +8,7 @@ on:
 jobs:
   terraform:
     runs-on: ubuntu-latest
-    permissions:
-      # Grant write permissions for the GITHUB_TOKEN to interact with repository administration (environments)
-      contents: read
-      actions: read
-      administration: write
+    permissions: write-all
     defaults:
       run:
         working-directory: .github/infra
