@@ -9,4 +9,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print environment variable
-        run: echo $VAR
+        run: echo ${{ vars.VAR }}
