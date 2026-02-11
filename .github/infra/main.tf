@@ -6,9 +6,16 @@ terraform {
   }
 }
 
+variable "github_token" {
+  description = "GitHub token with repo and environment access."
+  type        = string
+  sensitive   = true
+}
+
 # Configure the GitHub provider
 provider "github" {
   # The token will be sourced from GITHUB_TOKEN environment variable in the workflow
+  token = var.github_token
 }
 
 # Data source to fetch the current repository details

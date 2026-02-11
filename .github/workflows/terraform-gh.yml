@@ -1,9 +1,12 @@
 name: Terraform GitHub Environment Management
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+    inputs:
+      token:
+        description: 'GitHub Token with repo and workflow permissions'
+        required: true
+        type: string
 
 jobs:
   terraform:
@@ -12,6 +15,9 @@ jobs:
     defaults:
       run:
         working-directory: .github/infra
+
+    env:
+      TF_VAR_github_token: ${{ vars.token }}
 
     steps:
       - name: Checkout code
