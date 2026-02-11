@@ -13,7 +13,7 @@ provider "github" {
 
 # Data source to fetch the current repository details
 data "github_repository" "current" {
-  full_name = "whichwit/gatest" # Replace with your repository full name
+  full_name = "gatest" # Replace with your repository full name
 }
 
 # Create a 'staging' environment
