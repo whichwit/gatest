@@ -7,6 +7,9 @@ on:
       environment:
         required: true
         type: string
+      VAR:
+        required: true
+        type: string
 
 jobs:
   my-dynamic-env-job:
