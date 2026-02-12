@@ -29,7 +29,7 @@ jobs:
 
   terraform-plan:
     needs: validate
-    uses: amsrun/template/.github/workflows/terraform-github.yml@main
+    uses: amsrun/template/.github/workflows/called-terraform-github.yml@main
     with:
       repository: ${{ inputs.repository }}
       token: ${{ inputs.token }}
@@ -37,9 +37,19 @@ jobs:
 
   terraform-apply:
     needs: terraform-plan
-    uses: amsrun/template/.github/workflows/terraform-github.yml@main
+    uses: amsrun/template/.github/workflows/called-terraform-github.yml@main
     with:
       repository: ${{ inputs.repository }}
       token: ${{ inputs.token }}
       apply: true
+
+  seed-repository:
+    needs: terraform-apply
+    uses: amsrun/template/.github/workflows/called-seed-repository.yml@main
+    with:
+      repository: ${{ inputs.repository }}
+      default_branch: develop
+    secrets:
+      token: ${{ inputs.token }}
+
 

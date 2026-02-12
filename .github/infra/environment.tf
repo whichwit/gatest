@@ -1,23 +1,23 @@
 locals {
-	environment_secret_pairs = flatten([
-		for env, secrets in var.environment_secrets : [
-			for name, value in secrets : {
-				environment = env
-				name        = name
-				value       = value
-			}
-		]
-	])
+  environment_secret_pairs = flatten([
+    for env, secrets in var.environment_secrets : [
+      for name, value in secrets : {
+        environment = env
+        name        = name
+        value       = value
+      }
+    ]
+  ])
 }
 
 # ========== Create a 'staging' environment
 resource "github_repository_environment" "staging" {
-  repository = github_repository.next.name
+  repository  = github_repository.next.name
   environment = "staging"
   # Optional: add deployment branch policies or wait timers
   deployment_branch_policy {
-    protected_branches = true
-      custom_branch_policies = true
+    protected_branches     = false
+    custom_branch_policies = true
   }
 
   reviewers {
@@ -34,14 +34,14 @@ resource "github_repository_environment_deployment_policy" "staging" {
 
 # ========== Create a 'production' environment
 
-  resource "github_repository_environment" "production" {
-  repository = github_repository.next.name
-  environment = "production"
+resource "github_repository_environment" "production" {
+  repository          = github_repository.next.name
+  environment         = "production"
   prevent_self_review = true
 
   deployment_branch_policy {
-    protected_branches = true
-      custom_branch_policies = true
+    protected_branches     = false
+    custom_branch_policies = true
   }
 
   reviewers {
@@ -59,14 +59,14 @@ resource "github_repository_environment_deployment_policy" "production" {
 # ========== Create environment secrets
 
 resource "github_actions_environment_secret" "this" {
-	for_each = {
-		for pair in local.environment_secret_pairs : "${pair.environment}.${pair.name}" => pair
-	}
+  for_each = {
+    for pair in local.environment_secret_pairs : "${pair.environment}.${pair.name}" => pair
+  }
 
-	repository      = github_repository.next.name
-	environment     = each.value.environment
-	secret_name     = each.value.name
-	plaintext_value = each.value.value
+  repository      = github_repository.next.name
+  environment     = each.value.environment
+  secret_name     = each.value.name
+  plaintext_value = each.value.value
 }
 
 

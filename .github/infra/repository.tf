@@ -14,7 +14,7 @@ resource "github_repository" "next" {
   allow_auto_merge = true
   allow_rebase_merge = false
   delete_branch_on_merge = true
-  auto_init = true
+  auto_init = false
 
 }
 
@@ -23,8 +23,8 @@ resource "github_repository" "next" {
 #   branch     = "develop"
 # }
 
-resource "github_branch_default" "default"{
-  repository = github_repository.next.name
-  branch     = "develop"
-  rename     = true
-}
+# resource "github_branch_default" "default"{
+#   repository = github_repository.next.name
+#   branch     = "develop"
+#   rename     = true
+# }
