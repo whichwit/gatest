@@ -9,7 +9,7 @@ on:
         type: string
       apply:
         description: 'Whether to apply the Terraform configuration (true/false)'
-        required: false
+        required: true
         default: 'false'
         type: boolean
       token:
