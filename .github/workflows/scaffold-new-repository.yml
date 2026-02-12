@@ -36,7 +36,6 @@ jobs:
 
   terraform-plan:
     needs: validate
-    runs-on: ubuntu-latest
     uses: amsrun/template/.github/workflows/terraform-github.yml@main
     with:
       repository: ${{ inputs.repository }}
