@@ -8,3 +8,10 @@ variable "github_repository" {
   description = "The name of the GitHub repository"
   type        = string
 }
+
+
+variable "environment_secrets" {
+	description = "Map of environment name to secret name/value pairs."
+	type        = map(map(string))
+	default     = {}
+}

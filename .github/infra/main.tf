@@ -19,3 +19,15 @@ provider "github" {
 data "github_team" "dp_reviewers" {
   slug = "dp-reviewers"
 }
+
+data "github_team" "dp" {
+  slug = "dp"
+}
+
+data "github_user" "current" {
+  username = "whichwit"
+}
+
+data "github_users" "managers" {
+  usernames = ["whichwit"]
+}
