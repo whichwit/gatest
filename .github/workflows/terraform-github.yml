@@ -58,5 +58,5 @@ jobs:
         run: terraform plan
 
       - name: Terraform Apply
-        if: inputs.apply == 'true'
+        if: inputs.apply
         run: terraform apply -auto-approve
