@@ -1,4 +1,4 @@
-name: Seed new repository
+name: Seed new repository (Called)
 
 on:
   workflow_call:
