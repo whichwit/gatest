@@ -8,6 +8,16 @@ locals {
       }
     ]
   ])
+
+  environment_variable_pairs = flatten([
+    for env, secrets in var.environment_secrets : [
+      for name, value in secrets : {
+        environment = env
+        name        = name
+        value       = value
+      }
+    ]
+  ])
 }
 
 # ========== Create a 'development' environment
@@ -88,12 +98,12 @@ resource "github_actions_environment_secret" "this" {
 
 resource "github_actions_environment_variable" "this" {
   for_each = {
-    for pair in local.environment_secret_pairs : "${pair.environment}.${pair.name}" => pair
+    for pair in local.environment_variable_pairs : "${pair.environment}.${pair.name}" => pair
   }
 
   repository      = github_repository.next.name
   environment     = each.value.environment
-  variable_name   = format("%s_VAR", each.value.name)
+  variable_name   = each.value.name
   value          = each.value.value
 }
 
