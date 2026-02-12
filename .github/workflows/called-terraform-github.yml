@@ -12,11 +12,11 @@ on:
         required: true
         default: false
         type: boolean
+    secrets:
       token:
         description: 'GitHub Token with repo and workflow permissions'
         required: true
         type: string
-    secrets:
       IAM_AWS_CICD_ACCESSKEY_DEV:
         description: 'AWS Access Key for CICD in Development'
         required: true
@@ -54,9 +54,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - run: env | grep GITHUB
-      - run: env | grep TF_VAR
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
