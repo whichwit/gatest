@@ -15,3 +15,7 @@ provider "github" {
 
 # Data source to fetch the current repository details
 
+
+data "github_team" "dp_reviewers" {
+  slug = "dp-reviewers"
+}

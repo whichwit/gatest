@@ -5,6 +5,6 @@ variable "github_token" {
 }
 
 variable "github_repository" {
-  description = "The full name of the GitHub repository (e.g., 'owner/repo')."
+  description = "The name of the GitHub repository"
   type        = string
 }
