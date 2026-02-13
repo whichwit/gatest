@@ -35,7 +35,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Scaffold Repository with Terraform
         id: scaffold_repo
-        uses: ./.github/actions/scaffold-repository@main
+        uses: ./.github/actions/scaffold-repository
         with:
           repository: ${{ inputs.repository }}
           token: ${{ inputs.token }}

@@ -15,4 +15,4 @@ runs:
   using: 'composite'
   steps:
     - name: Validate Repository
-      uses: ./.github/actions/test-action@main
+      uses: ./.github/actions/test-action
