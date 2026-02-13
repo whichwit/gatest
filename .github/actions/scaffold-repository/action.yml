@@ -30,7 +30,6 @@ runs:
         github_token = "${{ inputs.token }}"
         github_repository = "${{ inputs.repository }}"
         EOF
-        cat ${{ github.action_path }}/terraform.tfvars
       shell: bash
     - name: Apply Terraform to Scaffold Repository
       uses: ./.github/actions/terraform-apply

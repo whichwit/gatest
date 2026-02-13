@@ -50,3 +50,31 @@ jobs:
         with:
           repository: ${{ inputs.repository }}
           token: ${{ inputs.token }}
+          variables: |
+            github_token = "${{ inputs.token }}"
+            github_repository = "${{ inputs.repository }}"
+            environment_secrets = {
+              "development": {
+                "AWS_ACCESS_KEY_ID": "${{ secrets.IAM_AWS_CICD_ACCESSKEY_DEV }}",
+                "AWS_SECRET_ACCESS_KEY": "${{ secrets.IAM_AWS_CICD_SECRETID_DEV }}"
+              },
+              "staging": {
+                "AWS_ACCESS_KEY_ID": "${{ secrets.IAM_AWS_CICD_ACCESSKEY_STAGING }}",
+                "AWS_SECRET_ACCESS_KEY": "${{ secrets.IAM_AWS_CICD_SECRETID_STAGING }}"
+              },
+              "production": {
+                "AWS_ACCESS_KEY_ID": "${{ secrets.IAM_AWS_CICD_ACCESSKEY_PROD }}",
+                "AWS_SECRET_ACCESS_KEY": "${{ secrets.IAM_AWS_CICD_SECRETID_PROD }}"
+              }
+            }
+            environment_variables = {
+              "development": {
+                "AWS_SECRET_ACCESS_KEY_VAR": "info"
+              },
+              "staging": {
+                "AWS_SECRET_ACCESS_KEY_VAR": "debug"
+              },
+              "production": {
+                "AWS_SECRET_ACCESS_KEY_VAR": "error"
+              }
+            }
