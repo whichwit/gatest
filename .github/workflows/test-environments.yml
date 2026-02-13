@@ -56,7 +56,7 @@ jobs:
           echo "GitHub Environment: ${{ github.environment }}"
           echo "Workflow: ${{ github.workflow }}"
           echo "Repository: ${{ github.repository }}"
-  stage-two:
+  stage-three:
     runs-on: ubuntu-latest
     environment: staging
     steps:
