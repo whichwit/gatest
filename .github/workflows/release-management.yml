@@ -13,6 +13,7 @@ jobs:
     outputs:
       version: ${{ steps.create-version.outputs.version }}
     steps:
+      - run: pwd
       - name: Generate Release Version
         id: create-version
         run: |
