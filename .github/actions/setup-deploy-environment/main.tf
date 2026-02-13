@@ -11,8 +11,6 @@ provider "github" {
   # The token will be sourced from GITHUB_TOKEN environment variable in the workflow
   token = var.github_token
   owner = "amsrun"
-  write_delay_ms = 3000
-  retry_delay_ms = 2000
 }
 
 data "github_repository" "this" {
