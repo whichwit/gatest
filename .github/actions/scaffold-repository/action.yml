@@ -17,7 +17,7 @@ runs:
     - name: Create terraform.tfvars with inputs
       run: |
         cat <<'EOF' > ${{ github.action_path }}/terraform.tfvars
-        token = "${{ inputs.token }}"
+        github_token = "${{ inputs.token }}"
         github_repository = "${{ inputs.repository }}"
         EOF
         cat ${{ github.action_path }}/terraform.tfvars
