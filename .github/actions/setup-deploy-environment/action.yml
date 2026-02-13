@@ -1,0 +1,131 @@
+name: Scaffold New Repository
+description: 'Scaffolds a new repository with Terraform configuration to create the repository'
+
+inputs:
+  repository:
+    description: 'Name for the new repository (name only)'
+    required: true
+    type: string
+  token:
+    description: 'GitHub Token with repo and workflow permissions'
+    required: true
+    type: string
+  owner:
+    description: 'GitHub username or organization that will own the new repository'
+    required: true
+    type: string
+    default: 'amsrun'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Create terraform.tfvars with inputs
+      run: |
+        cat <<'EOF' > ${{ github.action_path }}/terraform.tfvars
+        github_token = "${{ inputs.token }}"
+        github_repository = "${{ inputs.repository }}"
+        environment_secrets = {
+          "development": {
+            "API_KEY": "dev-key",
+            "DB_URL": "postgres://..."
+          },
+          "staging": {
+            "API_KEY": "staging-key",
+            "DB_URL": "postgres://..."
+          },
+          "production": {
+            "API_KEY": "prod-key",
+            "DB_URL": "postgres://..."
+          }
+        }
+        environment_variables = {
+          "development": {
+            "LOG_LEVEL": "info"
+          },
+          "staging": {
+            "LOG_LEVEL": "debug"
+          },
+          "production": {
+            "LOG_LEVEL": "error"
+          }
+        }
+        EOF
+        cat ${{ github.action_path }}/terraform.tfvars
+      shell: bash
+    - name: Apply Terraform to Scaffold Repository
+      uses: ./.github/actions/terraform-apply
+      with:
+        working-directory: ${{ github.action_path }}
+        # variables: |
+        #   github_token = "${{ inputs.token }}"
+        #   github_repository = "${{ inputs.repository }}"
+
+    - name: Prepare seed files
+      shell: bash
+      run: |
+        # Create a temporary directory for the new repo
+        mkdir -p /tmp/new-repo/.github/workflows
+
+        # Copy template files (adjust paths as needed)
+        cp -r .github/workflows /tmp/new-repo/.github/ 2>/dev/null || echo "No templates directory"
+        cp LICENSE.txt /tmp/new-repo/ 2>/dev/null || echo "No LICENSE"
+        cp README.md /tmp/new-repo/ 2>/dev/null || echo "No README"
+
+        # You can add more files to copy here
+        # cp -r src /tmp/new-repo/
+        # cp -r config /tmp/new-repo/
+
+        ls -la /tmp/new-repo
+
+    - name: Initialize new repository
+      working-directory: /tmp/new-repo
+      shell: bash
+      run: |
+        git init
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+
+        # Create and checkout new branch (main or develop)
+        git init
+        git add .
+        git commit -m "Initial commit - Seed repository with template files"
+        git branch -M ${{ inputs.default_branch }}
+
+    - name: Set up remote origin with token
+      working-directory: /tmp/new-repo
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+        REPO_NAME: ${{ inputs.repository }}
+      run: |
+        # Set up remote origin using the token
+        git remote add origin https://${GH_TOKEN}@github.com/${{ inputs.owner }}/${REPO_NAME}.git
+
+        # Verify remote is set
+        git remote -v
+
+    - name: Push to new repository
+      working-directory: /tmp/new-repo
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.token }}
+      run: |
+        # Push to origin
+        git push -u origin ${{ inputs.default_branch }}
+
+    - name: Summary
+      shell: bash
+      run: |
+        echo "✅ Repository ${{ inputs.repository }} has been seeded successfully!"
+        echo "🔗 https://github.com/${{ inputs.owner }}/${{ inputs.repository }}"
+
+    # - name: Apply Terraform to Scaffold Repository
+    #   uses: ./.github/actions/terraform-apply
+    #   with:
+    #     working-directory: ./.github/actions/scaffold-repository/terraform
+    #     variables-json: |
+    #       {
+    #         "repository_name": "${{ inputs.repository }}",
+    #         "github_token": "${{ inputs.token }}"
+    #       }
+
