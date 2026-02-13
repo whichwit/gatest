@@ -21,7 +21,7 @@ jobs:
     uses: amsrun/template/.github/workflows/release-management.yml@main
 
   debug:
-    needs: release-management
+    needs: [release-management, unit-test]
     name: Debug
     runs-on: ubuntu-latest
     steps:
@@ -29,71 +29,3 @@ jobs:
         run: |
           echo "Release version: ${{ needs.release-management.outputs.release-version }}"
           echo "This version can be used for tagging, creating releases, etc."
-
-  stage-two:
-    runs-on: ubuntu-latest
-    needs: release-management
-    environment: ${{ inputs.environment }}
-    steps:
-      - name: Print custom message
-        run: |
-          echo "Message: ${{ inputs.message }}"
-
-      - name: Print environment variable
-        run: |
-          echo "Environment variable example: ${{ vars.ENV_VAR || 'No ENV_VAR set' }}"
-
-      - name: Print all available context
-        run: |
-          echo "GitHub Environment: ${{ github.environment }}"
-          echo "Workflow: ${{ github.workflow }}"
-          echo "Repository: ${{ github.repository }}"
-  stage-three:
-    runs-on: ubuntu-latest
-    needs: stage-two
-    environment: production
-    steps:
-      - name: Print custom message
-        run: |
-          echo "Message: ${{ inputs.message }}"
-
-      - name: Print environment name
-        run: |
-          echo "Environment: ${{ vars.ENVIRONMENT || 'development' }}"
-
-      - name: Print environment variable
-        run: |
-          echo "Environment variable example: ${{ vars.ENV_VAR || 'No ENV_VAR set' }}"
-
-      - name: Print all available context
-        run: |
-          echo "GitHub Environment: ${{ github.environment }}"
-          echo "Workflow: ${{ github.workflow }}"
-          echo "Repository: ${{ github.repository }}"
-
-  stage-four:
-    runs-on: ubuntu-latest
-    needs: print-env-variable
-    environment: template
-    steps:
-      - name: Print custom message
-        run: |
-          echo "Message: ${{ inputs.message }}"
-
-      - name: Print environment name
-        run: |
-          echo "Environment: ${{ vars.ENVIRONMENT || 'development' }}"
-
-      - name: Print environment variable
-        run: |
-          echo "Environment variable example: ${{ vars.ENV_VAR || 'No ENV_VAR set' }}"
-
-      - name: Print all available context
-        run: |
-            echo "GitHub Environment: ${{ github.environment }}"
-            echo "Workflow: ${{ github.workflow }}"
-            echo "Repository: ${{ github.repository }}"
-            echo "Runnumber: ${{ github.run_number }}"
-            echo "RunID: ${{ github.run_id }}"
-            echo "Actor: ${{ github.actor }}"
-            echo "SHA: ${{ github.sha }}"
