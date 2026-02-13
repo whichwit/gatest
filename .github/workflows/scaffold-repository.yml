@@ -33,11 +33,10 @@ jobs:
     steps:
       - name: Scaffold Repository with Terraform
         id: scaffold_repo
-        uses: amsrun/template/.github/actions/scaffold-repository@main
+        uses: ./.github/actions/scaffold-repository@main
         with:
           repository: ${{ inputs.repository }}
           token: ${{ inputs.token }}
-
   # plan:
   #   needs: validate
   #   uses: amsrun/template/.github/workflows/called-terraform-github.yml@main
