@@ -37,37 +37,16 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
 
-      - name: Scaffold Repository with Terraform
-        id: scaffold_repo
-        uses: ./.github/actions/scaffold-repository
+      # - name: Scaffold Repository with Terraform
+      #   id: scaffold_repo
+      #   uses: ./.github/actions/scaffold-repository
+      #   with:
+      #     repository: ${{ inputs.repository }}
+      #     token: ${{ inputs.token }}
+
+      - name: Setup Deployment Environment with Terraform
+        id: setup_deployment_environment
+        uses: ./.github/actions/setup-deploy-environment
         with:
           repository: ${{ inputs.repository }}
           token: ${{ inputs.token }}
-  # plan:
-  #   needs: validate
-  #   uses: amsrun/template/.github/workflows/called-terraform-github.yml@main
-  #   with:
-  #     repository: ${{ inputs.repository }}
-  #     token: ${{ inputs.token }}
-  #     apply: false
-  #   secrets: inherit
-
-  # apply:
-  #   needs: validate
-  #   uses: amsrun/template/.github/workflows/called-terraform-github.yml@main
-  #   with:
-  #     repository: ${{ inputs.repository }}
-  #     token: ${{ inputs.token }}
-  #     apply: true
-  #   secrets: inherit
-
-  # seed-repository:
-  #   needs: apply
-  #   uses: amsrun/template/.github/workflows/called-seed-repository.yml@main
-  #   with:
-  #     repository: ${{ inputs.repository }}
-  #     default_branch: develop
-  #   secrets:
-  #     token: ${{ inputs.token }}
-
-
