@@ -1,0 +1,38 @@
+name: Test Environment Variables
+
+on:
+  workflow_call:
+    inputs:
+      message:
+        description: 'Custom message to print'
+        required: false
+        type: string
+        default: 'Hello from reusable workflow'
+      environment:
+        description: 'Environment to use for the job'
+        required: false
+        type: string
+        default: 'development'
+
+jobs:
+  print-env-variable:
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Print custom message
+        run: |
+          echo "Message: ${{ inputs.message }}"
+
+      - name: Print environment name
+        run: |
+          echo "Environment: ${{ vars.ENVIRONMENT || 'development' }}"
+
+      - name: Print environment variable
+        run: |
+          echo "Environment variable example: ${{ vars.ENV_VAR || 'No ENV_VAR set' }}"
+
+      - name: Print all available context
+        run: |
+          echo "GitHub Environment: ${{ github.environment }}"
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Repository: ${{ github.repository }}"
