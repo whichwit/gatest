@@ -4,6 +4,12 @@ on:
   push:
   workflow_call:
 
+defaults:
+  runs-on: ubuntu-latest
+  run:
+    shell: bash
+
+
 jobs:
   unit-test:
     name: Run unit tests
@@ -18,7 +24,16 @@ jobs:
 
   release-management:
     name: Release management
-    uses: amsrun/template/.github/workflows/release-management.yml@main
+    outputs:
+      version: ${{ steps.generate-version.outputs.version }}
+    steps:
+      - name: Generate Release Version
+        id: generate-version
+        uses: amsrun/template/.github/actions/generate-version@main
+        with:
+          release: true
+
+    #uses: amsrun/template/.github/workflows/release-management.yml@main
 
   debug:
     needs: [release-management, unit-test]
@@ -27,5 +42,5 @@ jobs:
     steps:
       - name: Display Release Version
         run: |
-          echo "Release version: ${{ needs.release-management.outputs.release-version }}"
+          echo "Release version: ${{ needs.release-management.outputs.version }}"
           echo "This version can be used for tagging, creating releases, etc."
