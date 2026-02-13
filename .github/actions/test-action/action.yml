@@ -1,0 +1,30 @@
+name: 'Simple Test Action'
+description: 'A simple composite action that runs tests'
+
+inputs:
+  test-path:
+    description: 'Path to run tests from'
+    required: false
+    default: './'
+
+  timeout:
+    description: 'Test timeout in seconds'
+    required: false
+    default: '300'
+
+outputs:
+  result:
+    description: 'Test result status'
+    value: ${{ steps.run-tests.outputs.status }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Run Tests'
+      id: run-tests
+      shell: bash
+      run: |
+        echo "Running tests from ${{ inputs.test-path }}"
+        echo "Timeout: ${{ inputs.timeout }}s"
+        echo "status=success" >> $GITHUB_OUTPUT
+        exit 0
