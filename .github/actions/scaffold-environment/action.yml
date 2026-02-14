@@ -1,5 +1,5 @@
-name: Scaffold Deployment Environment
-description: 'Scaffolds a new repository with Terraform configuration to create the repository'
+name: Scaffold Deployment Environments
+description: 'Scaffolds with Terraform configuration to create deployment environments and secrets'
 
 inputs:
   repository:

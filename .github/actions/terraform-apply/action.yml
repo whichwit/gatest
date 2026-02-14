@@ -10,6 +10,9 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+
     - name: Terraform Init
       shell: bash
       working-directory: ${{ inputs.working-directory }}

@@ -61,9 +61,9 @@ jobs:
             exit 1
           fi
 
-  scaffolding:
+  scaffold-repository:
     needs: [check-availability, check-existence]
-    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && inputs.create_repository }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout template repository
@@ -73,7 +73,6 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: Scaffold Repository with Terraform
-        if: ${{ inputs.create_repository }}
         id: scaffold_repo
         uses: ./.github/actions/scaffold-repository
         with:
@@ -83,8 +82,18 @@ jobs:
             github_token = "${{ inputs.token }}"
             github_repository = "${{ inputs.repository }}"
 
+  scaffold-environment:
+    needs: [check-availability, check-existence, scaffold-repository]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && inputs.create_environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout template repository
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
       - name: Setup Deployment Environment with Terraform
-        if: ${{ inputs.create_environment }}
         id: setup_deployment_environment
         uses: ./.github/actions/scaffold-environment
         with:
@@ -108,8 +117,15 @@ jobs:
               }
             }
 
+  scaffold-default-branch:
+    needs: [check-availability, check-existence, scaffold-repository]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && inputs.default_branch != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout template repository
+        uses: actions/checkout@v4
+
       - name: Create Default Branch from Template
-        if: ${{ inputs.default_branch != '' }}
         id: scaffold_default_branch
         uses: ./.github/actions/scaffold-default-branch
         with:
