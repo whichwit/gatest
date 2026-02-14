@@ -33,7 +33,7 @@ on:
         type: string
 
 jobs:
-  check-availability:
+  check-repo-availability:
     if: ${{ inputs.create_repository }}
     runs-on: ubuntu-latest
     steps:
@@ -47,7 +47,7 @@ jobs:
             exit 1
           fi
 
-  check-existence:
+  check-repo-existence:
     if: ${{ !inputs.create_repository }}
     runs-on: ubuntu-latest
     steps:
@@ -62,7 +62,7 @@ jobs:
           fi
 
   scaffold-repository:
-    needs: [check-availability, check-existence]
+    needs: [check-repo-availability, check-repo-existence]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && inputs.create_repository }}
     runs-on: ubuntu-latest
     steps:
@@ -83,7 +83,7 @@ jobs:
             github_repository = "${{ inputs.repository }}"
 
   scaffold-environment:
-    needs: [check-availability, check-existence, scaffold-repository]
+    needs: [check-repo-availability, check-repo-existence, scaffold-repository]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && inputs.create_environment }}
     runs-on: ubuntu-latest
     steps:
@@ -118,7 +118,7 @@ jobs:
             }
 
   scaffold-default-branch:
-    needs: [check-availability, check-existence, scaffold-repository]
+    needs: [check-repo-availability, check-repo-existence, scaffold-repository]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && inputs.default_branch != '' }}
     runs-on: ubuntu-latest
     steps:
