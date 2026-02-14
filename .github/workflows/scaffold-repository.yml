@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       repository:
-        description: 'Name (only) for the new/existing repository'
+        description: 'Name of the target repository'
         required: true
         type: string
       token:
