@@ -119,14 +119,17 @@ jobs:
             environment_variables = {
               "development": {
                 "AWS_ACCOUNT_ID": "559587901710",
+                "AWS_REGION": "us-east-2",
                 "AWS_DEPLOYMENT_ROLE": "d-${{ inputs.infra_name }}-deployment"
               },
               "staging": {
                 "AWS_ACCOUNT_ID": "001553724852",
+                "AWS_REGION": "us-east-2",
                 "AWS_DEPLOYMENT_ROLE": "s-${{ inputs.infra_name }}-deployment"
               },
               "production": {
                 "AWS_ACCOUNT_ID": "870288520478",
+                "AWS_REGION": "us-east-2",
                 "AWS_DEPLOYMENT_ROLE": "p-${{ inputs.infra_name }}-deployment"
               }
             }
