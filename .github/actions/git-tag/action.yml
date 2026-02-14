@@ -84,7 +84,8 @@ runs:
         fi
 
         if git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
-          echo "Tag $TAG already exists." >&2
+          echo "Tag $TAG already exists, skipping creation." >&2
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           exit 0
         fi
 
