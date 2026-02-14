@@ -14,17 +14,22 @@ on:
       create_repository:
         description: 'Create a new repository'
         required: false
-        default: false
+        default: true
         type: boolean
       create_environment:
-        description: 'Create deployment environment for the repository'
+        description: 'Create deployment environments for the repository'
         required: false
-        default: false
+        default: true
         type: boolean
-      create_default_branch:
+      default_branch:
         description: 'Name of the default branch to create from template (leave empty to skip)'
         required: false
         default: 'develop'
+        type: string
+      infra_name:
+        description: 'Name for the infrastructure project (leave empty to skip)'
+        required: false
+        default: ''
         type: string
 
 jobs:
@@ -104,10 +109,10 @@ jobs:
             }
 
       - name: Create Default Branch from Template
-        if: ${{ inputs.create_default_branch != '' }}
+        if: ${{ inputs.default_branch != '' }}
         id: scaffold_default_branch
         uses: ./.github/actions/scaffold-default-branch
         with:
           repository: ${{ inputs.repository }}
           token: ${{ inputs.token }}
-          branch: ${{ inputs.create_default_branch }}
+          branch: ${{ inputs.default_branch }}
