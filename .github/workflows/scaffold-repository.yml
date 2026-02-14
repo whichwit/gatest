@@ -133,6 +133,9 @@ jobs:
                 "AWS_DEPLOYMENT_ROLE": "p-${{ inputs.infra_name }}-deployment"
               }
             }
+            repository_variables = {
+              "INFRASTRUCTURE_PROJECT": "${{ inputs.infra_name }}"
+            }
 
   scaffold-default-branch:
     needs: [check-repo-availability, check-repo-existence, scaffold-repository]

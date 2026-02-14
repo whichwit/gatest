@@ -20,3 +20,8 @@ variable "environment_variables" {
   type        = map(map(string))
   default     = {}
 }
+variable "repository_variables" {
+  description = "Map of repository variable name to value pairs."
+  type        = map(string)
+  default     = {}
+}

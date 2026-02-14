@@ -18,6 +18,18 @@ locals {
       }
     ]
   ])
+
+  # Repository variables can be iterated directly from the input map.
+}
+
+# ========== Create repository variables
+
+resource "github_actions_variable" "this" {
+  for_each = var.repository_variables
+
+  repository    = data.github_repository.this.name
+  variable_name = each.key
+  value         = each.value
 }
 
 # ========== Create a 'development' environment
@@ -118,3 +130,5 @@ resource "github_actions_environment_variable" "this" {
     github_repository_environment.production
   ]
 }
+
+
