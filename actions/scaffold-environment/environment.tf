@@ -46,10 +46,6 @@ resource "github_repository_environment" "staging" {
     protected_branches     = false
     custom_branch_policies = true
   }
-
-  reviewers {
-    teams = [data.github_team.dp.id]
-  }
 }
 
 resource "github_repository_environment_deployment_policy" "staging" {
@@ -58,6 +54,27 @@ resource "github_repository_environment_deployment_policy" "staging" {
   branch_pattern = "develop"
 }
 
+resource "github_repository_environment" "release-approval" {
+  repository          = data.github_repository.this.name
+  environment         = "release-approval"
+  prevent_self_review = true
+
+  deployment_branch_policy {
+    protected_branches     = false
+    custom_branch_policies = true
+  }
+
+  reviewers {
+    users = [data.github_user.current.id]
+    teams = [data.github_team.dp_po.id]
+  }
+}
+
+resource "github_repository_environment_deployment_policy" "release-approval" {
+  repository     = data.github_repository.this.name
+  environment    = github_repository_environment.release-approval.environment
+  branch_pattern = "develop"
+}
 
 # ========== Create a 'production' environment
 
@@ -71,10 +88,10 @@ resource "github_repository_environment" "production" {
     custom_branch_policies = true
   }
 
-  reviewers {
-    users = [data.github_user.current.id]
-    teams = [data.github_team.dp_po.id]
-  }
+  # reviewers {
+  #   users = [data.github_user.current.id]
+  #   teams = [data.github_team.dp_po.id]
+  # }
 }
 
 resource "github_repository_environment_deployment_policy" "production" {
