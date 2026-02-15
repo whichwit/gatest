@@ -37,6 +37,12 @@ resource "github_repository_environment_deployment_policy" "development" {
   branch_pattern = "develop"
 }
 
+resource "github_repository_environment_deployment_policy" "development2" {
+  repository     = data.github_repository.this.name
+  environment    = github_repository_environment.development.environment
+  branch_pattern = "demo"
+}
+
 # ========== Create a 'staging' environment
 resource "github_repository_environment" "staging" {
   repository  = data.github_repository.this.name
@@ -54,26 +60,10 @@ resource "github_repository_environment_deployment_policy" "staging" {
   branch_pattern = "develop"
 }
 
-resource "github_repository_environment" "release-approval" {
-  repository          = data.github_repository.this.name
-  environment         = "release-approval"
-  prevent_self_review = true
-
-  deployment_branch_policy {
-    protected_branches     = false
-    custom_branch_policies = true
-  }
-
-  reviewers {
-    users = [data.github_user.current.id]
-    teams = [data.github_team.dp_po.id]
-  }
-}
-
-resource "github_repository_environment_deployment_policy" "release-approval" {
+resource "github_repository_environment_deployment_policy" "staging2" {
   repository     = data.github_repository.this.name
-  environment    = github_repository_environment.release-approval.environment
-  branch_pattern = "develop"
+  environment    = github_repository_environment.staging.environment
+  branch_pattern = "demo"
 }
 
 # ========== Create a 'production' environment
@@ -88,16 +78,22 @@ resource "github_repository_environment" "production" {
     custom_branch_policies = true
   }
 
-  # reviewers {
-  #   users = [data.github_user.current.id]
-  #   teams = [data.github_team.dp_po.id]
-  # }
+  reviewers {
+    users = [data.github_user.current.id]
+    teams = [data.github_team.dp_po.id]
+  }
 }
 
 resource "github_repository_environment_deployment_policy" "production" {
   repository     = data.github_repository.this.name
   environment    = github_repository_environment.production.environment
   branch_pattern = "develop"
+}
+
+resource "github_repository_environment_deployment_policy" "production2" {
+  repository     = data.github_repository.this.name
+  environment    = github_repository_environment.production.environment
+  branch_pattern = "demo"
 }
 
 # ========== Create environment secrets
